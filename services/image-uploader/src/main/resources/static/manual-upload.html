@@ -1,0 +1,52 @@
+<html>
+<head>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="css/materialize.min.css">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body class="container">
+
+<header>
+    <nav class="teal">
+        <div class="nav-wrapper center">
+            <a href="#" class="brand-logo">Image Uploader</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="web-cam-upload.html"><i class="material-icons left">camera_alt</i>Web-Cam Upload</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <div>
+        <form method="POST" enctype="multipart/form-data" action="/api/image-upload">
+            <div style="display: flex; flex: 1; flex-direction: column">
+                <div style="text-align: center">
+                    <p style="position: relative;">Drag your file here:</p>
+                </div>
+                <div style="border: teal;border-width: 5px;border-style: dotted;">
+                    <input id="file" style="opacity: 0; width: 100%" type="file" name="file"/>
+                </div>
+                <button id="submit" disabled class="btn waves-effect waves-light" type="submit" name="action" style="margin-top: 20px">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+<footer>
+
+</footer>
+
+<!-- Compiled and minified JavaScript -->
+<script src="js/materialize.min.js"></script>
+<script>
+
+    document.getElementById("file").addEventListener("change", (e) => {
+        document.getElementById("submit").disabled = false;
+    });
+</script>
+</body>
+
+</html>

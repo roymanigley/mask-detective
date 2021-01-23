@@ -1,0 +1,163 @@
+<html>
+<head>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="css/materialize.min.css">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script type="text/javascript" src="js/webcam.min.js"></script>
+</head>
+<body class="container">
+
+<header>
+    <nav class="teal">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">Image Uploader</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="manual-upload.html"><i class="material-icons left">file_upload</i>Manual Upload</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <div>
+
+        <!-- CSS -->
+        <style>
+            #camera {
+                width: 320px;
+                height: 240px;
+                border: 1px solid black;
+                border: none;
+            }
+
+            #camera > video, #imageprev {
+                border-radius: 50%;
+            }
+
+            .flex-wrapper {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-space: 20px;
+            }
+        </style>
+        <br>
+        <div class="flex-wrapper">
+            <div id="camera"></div>
+            <div id="results"></div>
+            <div>
+                <button id="startWebCam" onClick="configure()" class="btn waves-effect waves-light"
+                        type="submit" name="action" style="margin-top: 20px">Record
+                    <i class="material-icons right">fiber_manual_record</i>
+                </button>
+
+                <button id="takeSnapshot" disabled value="Take Snapshot" onClick="take_snapshot()"
+                        class="btn waves-effect waves-light" type="submit" name="action" style="margin-top: 20px">Take Snapshot
+                    <i class="material-icons right">camera_alt</i>
+                </button>
+
+                <button id="submit" disabled onClick="saveSnap()"
+                        class="btn waves-effect waves-light" type="submit" name="action" style="margin-top: 20px">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</main>
+<footer>
+
+</footer>
+
+<!-- Compiled and minified JavaScript -->
+<script src="js/materialize.min.js"></script>
+
+<!-- Code to handle taking the snapshot and displaying it locally -->
+<script language="JavaScript">
+
+
+    document.getElementById("startWebCam").disabled = false;
+    document.getElementById("takeSnapshot").disabled = true;
+    document.getElementById("submit").disabled = true;
+
+    // Configure a few settings and attach camera
+    function configure() {
+
+        document.getElementById("startWebCam").disabled = true;
+        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+            if (document.getElementById("imageprev"))
+                document.getElementById("imageprev").style.display = "none";
+            document.getElementById("camera").style.display = "block";
+
+            document.getElementById("startWebCam").disabled = true;
+            document.getElementById("takeSnapshot").disabled = false;
+            document.getElementById("submit").disabled = true;
+        });
+
+        Webcam.set({
+            width: 320,
+            height: 240,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+
+        Webcam.attach('#camera');
+    }
+
+    // A button for taking snaps
+
+
+    // preload shutter audio clip
+    var shutter = new Audio();
+    shutter.autoplay = false;
+    shutter.src = navigator.userAgent.match(/Firefox/) ? 'shutter.ogg' : 'shutter.mp3';
+
+    function take_snapshot() {
+        // play sound effect
+        shutter.play();
+
+        // take snapshot and get image data
+        Webcam.snap(function (data_uri) {
+            // display results in page
+            document.getElementById("camera").style.display = "none";
+            document.getElementById('results').innerHTML =
+                '<img id="imageprev" src="' + data_uri + '"/>';
+
+
+            document.getElementById("startWebCam").disabled = false;
+            document.getElementById("takeSnapshot").disabled = true;
+            document.getElementById("submit").disabled = false;
+        });
+
+        // Webcam.reset();
+    }
+
+    function saveSnap() {
+        // Get base64 value from <img id='imageprev'> source
+        var base64image = document.getElementById("imageprev").src;
+
+        Webcam.params.upload_name = "file";
+        Webcam.upload(base64image, '/api/image-upload', function (code, text) {
+            console.log('Save successfully');
+            if (code == 200) {
+                M.toast({html: '<button class="btn waves-effect waves-light" style="margin-right: 20px">SUCCESS</button> <p>Published</p>'})
+
+                document.getElementById("imageprev").style.display = "none";
+                document.getElementById("camera").style.display = "block";
+
+                document.getElementById("startWebCam").disabled = true;
+                document.getElementById("takeSnapshot").disabled = false;
+                document.getElementById("submit").disabled = true;
+            } else {
+                M.toast({html: '<button class="btn red waves-effect waves-light" style="margin-right: 20px">ERROR</button> <p>Not published</p>'})
+            }
+        });
+
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- HTML meta refresh URL redirection -->
+    <meta http-equiv="refresh"
+          content="0; url=manual-upload.html">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="css/materialize.min.css">
+</head>
+<body style="text-align: center">
+
+<div class="progress" style="top: -8px">
+    <div class="indeterminate"></div>
+</div>
+
+<div>
+    <div class="container">
+<p id="link" style="display: none">The page has moved to:
+    <a href="manual-upload.html">this page</a></p>
+    </div>
+
+<script src="js/materialize.min.js"></script>
+<script>
+    setTimeout(() => {
+       document.getElementById("link").style.display = "block";
+    }, 2000);
+</script>
+</body>
+</html>

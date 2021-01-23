@@ -1,0 +1,35 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+  # https://www.e4developer.com/2018/01/28/setting-up-rabbitmq-with-spring-cloud-stream/
+  # spring.cloud.stream.bindings.<channel-name>.destination
+  cloud:
+    stream:
+      bindings:
+        inputNose:
+          destination: nose-found-exchange
+          group: mask-detection-notifier-group
+        inputMouth:
+          destination: mouth-found-exchange
+          group: mask-detection-notifier-group
+  mail:
+    host: localhost
+    port: 1025
+    username: info@localhost.com
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+server:
+  port: 8084
+
+application:
+  classifier:
+    file:

@@ -1,0 +1,25 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+  # https://www.e4developer.com/2018/01/28/setting-up-rabbitmq-with-spring-cloud-stream/
+  # spring.cloud.stream.bindings.<channel-name>.destination
+  cloud:
+    stream:
+      bindings:
+        imageUploadChannel:
+          destination: image-upload-exchange
+  servlet:
+    multipart:
+      max-request-size: 30MB
+      max-file-size: 30MB
+
+server:
+  port: 8080
+
+application:
+  classifier:
+    file:
